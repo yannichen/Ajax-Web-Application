@@ -22,38 +22,49 @@ const Review = mongoose.model('Review');
 app.get('/api/reviews', function(req, res) {
     // TODO: retrieve all reviews or use filters coming in from req.query
     // send back as JSON list
-    if (req.query.year.length > 0 || req.query.semester.length > 0) {
-        if (req.query.year.length > 0 && req.query.semester.length > 0) {
-            const temp = Review.find({ year: { $eq: req.query.year } });
-            const reviews = temp.find({ semester: { $eq: req.query.semester } });
-            res.json(reviews.map(function(ele) {
-                return {
-                    'name': ele.name,
-                    'semester': ele.semester,
-                    'year': ele.year,
-                    'review': ele.review
-                };
-            }));
-        } else if (req.query.year.length > 0) {
-            const temp = Review.find({ year: { $eq: req.query.year } });
-            res.json(temp.map(function(ele) {
-                return {
-                    'name': ele.name,
-                    'semester': ele.semester,
-                    'year': ele.year,
-                    'review': ele.review
-                };
-            }));
+    if (req.query.year !== undefined || req.query.semester !== undefined) {
+        if (req.query.year !== undefined && req.query.semester !== undefined) {
+            Review.find({}, function(err, m) {
+                res.json(m.map(function(ele) {
+                    if (ele.year === req.query.year && ele.semester === req.query.semester) {
+                        return {
+                            'name': ele.name,
+                            'semester': ele.semester,
+                            'year': ele.year,
+                            'review': ele.review
+                        };
+                    } else {
+                        return {
+                            'name': null,
+                            'semester': null,
+                            'year': null,
+                            'review': null
+                        };
+                    }
+                }));
+            });
+        } else if (req.query.year !== undefined && req.query.semester === undefined) {
+            Review.find({ year: { $eq: req.query.year } }, function(err, m) {
+                res.json(m.map(function(ele) {
+                    return {
+                        'name': ele.name,
+                        'semester': ele.semester,
+                        'year': ele.year,
+                        'review': ele.review
+                    };
+                }));
+            });
         } else {
-            const reviews = Review.find({ semester: { $eq: req.query.semester } });
-            res.json(reviews.map(function(ele) {
-                return {
-                    'name': ele.name,
-                    'semester': ele.semester,
-                    'year': ele.year,
-                    'review': ele.review
-                };
-            }));
+            Review.find({ semester: { $eq: req.query.semester } }, function(err, m) {
+                res.json(m.map(function(ele) {
+                    return {
+                        'name': ele.name,
+                        'semester': ele.semester,
+                        'year': ele.year,
+                        'review': ele.review
+                    };
+                }));
+            });
         }
     } else {
         Review.find({}, function(err, m) {
