@@ -1,14 +1,4 @@
 // TODO: add client side code for single page application
-
-function main() {
-    const filterBtn = document.querySelectorAll('input[type="submit"]')[1];
-    filterBtn.addEventListener('click', filter);
-    const addBtn = document.querySelectorAll('input[type="submit"]')[0];
-    addBtn.addEventListener('click', add);
-}
-
-document.addEventListener("DOMContentLoaded", main);
-
 function getReviews() {
     const req = new XMLHttpRequest();
     const url = 'http://localhost:3000/api/reviews';
@@ -28,7 +18,7 @@ function getReviews() {
                 tr.appendChild(td3).textContent = m.year;
                 const td4 = document.createElement('td');
                 tr.appendChild(td4).textContent = m.review;
-                if (m.name != null && m.year != null && m.semester != null && m.review != null) {
+                if (m.name !== null && m.year !== null && m.semester !== null && m.review !== null) {
                     reviewList.appendChild(tr);
                 }
             });
@@ -64,10 +54,10 @@ function filter(evt) {
     const year = document.getElementById('filterYear').value;
     const semester = document.getElementById('filterSemester').value;
     console.log(year + "FILTERREVIEWS");
-    if (year.length > 0 && semester != "") {
+    if (year.length > 0 && semester !== "") {
         console.log(url, "URL");
         url += '?year=' + year + '&semester=' + semester;
-    } else if (semester != "") {
+    } else if (semester !== "") {
         console.log(url, "URL");
         url += '?semester=' + semester;
     } else if (year.length > 0) {
@@ -92,7 +82,7 @@ function filter(evt) {
                 tr.appendChild(td3).textContent = m.year;
                 const td4 = document.createElement('td');
                 tr.appendChild(td4).textContent = m.review;
-                if (m.name != null && m.year != null && m.semester != null && m.review != null) {
+                if (m.name !== null && m.year !== null && m.semester !== null && m.review !== null) {
                     reviewList.appendChild(tr);
                 }
             });
@@ -100,3 +90,12 @@ function filter(evt) {
     });
     req.send();
 }
+
+function main() {
+    const filterBtn = document.querySelectorAll('input[type="submit"]')[1];
+    filterBtn.addEventListener('click', filter);
+    const addBtn = document.querySelectorAll('input[type="submit"]')[0];
+    addBtn.addEventListener('click', add);
+}
+
+document.addEventListener("DOMContentLoaded", main);
